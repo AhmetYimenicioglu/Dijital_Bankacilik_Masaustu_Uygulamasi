@@ -6,7 +6,7 @@ CyberBank, **C#** ve **.NET 10 WPF** kullanılarak geliştirilmiş, modern finte
 
 ## 🌟 Özellikler
 
-- **Modern Fintech Arayüzü:** Koyu tema (Dark Mode), gradyan kart efektleri ve akıcı geçişler.
+
 - **Güvenli Kimlik Doğrulama:** PIN / Müşteri No doğrulaması ve demo hesaba tek tıkla hızlı giriş.
 - **Finansal Gösterge Paneli (Dashboard):** Vadesiz TL, Döviz ve Vadeli Mevduat hesapları ile toplam varlık özeti.
 - **Görsel Platinum Kredi Kartı:** Limit kullanımı, dönem borcu takibi, tek tıkla borç ödeme ve kart numarasını gizleme/gösterme.
