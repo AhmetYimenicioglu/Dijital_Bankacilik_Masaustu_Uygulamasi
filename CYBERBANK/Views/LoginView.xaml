@@ -1,0 +1,77 @@
+<UserControl x:Class="CyberBank.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1000">
+    <Grid Background="{StaticResource BrushBgApp}">
+        <!-- Decorative subtle background glow circles -->
+        <Canvas ClipToBounds="True">
+            <Ellipse Width="500" Height="500" Canvas.Left="-100" Canvas.Top="-100" Opacity="0.08">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#10B981" Offset="0"/>
+                        <GradientStop Color="Transparent" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse Width="600" Height="600" Canvas.Right="-150" Canvas.Bottom="-150" Opacity="0.08">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#3B82F6" Offset="0"/>
+                        <GradientStop Color="Transparent" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+        </Canvas>
+
+        <Border Width="460" VerticalAlignment="Center" HorizontalAlignment="Center"
+                Background="{StaticResource BrushBgSurface}"
+                BorderBrush="{StaticResource BrushBorder}"
+                BorderThickness="1"
+                CornerRadius="20"
+                Padding="36">
+            <StackPanel>
+                <!-- Brand Header -->
+                <StackPanel HorizontalAlignment="Center" Margin="0,0,0,28">
+                    <Border Width="64" Height="64" CornerRadius="16" Background="{StaticResource BrushBrandGradient}" HorizontalAlignment="Center" Margin="0,0,0,12">
+                        <TextBlock Text="CB" FontSize="26" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <TextBlock Text="CYBERBANK" FontSize="22" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Yeni Nesil Güvenli Dijital Bankacılık" FontSize="13" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <!-- Error Message (Hidden by default) -->
+                <Border x:Name="ErrorBorder" Background="#3B1219" BorderBrush="#EF4444" BorderThickness="1" CornerRadius="8" Padding="10" Margin="0,0,0,16" Visibility="Collapsed">
+                    <TextBlock x:Name="TxtError" Text="Hatalı Müşteri Numarası veya PIN girdiniz." Foreground="#F87171" FontSize="13" HorizontalAlignment="Center"/>
+                </Border>
+
+                <!-- Customer No / TC Input -->
+                <TextBlock Text="Müşteri No veya T.C. Kimlik No" Foreground="{StaticResource BrushTextSecondary}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6"/>
+                <TextBox x:Name="TxtIdentifier" Style="{StaticResource ModernTextBox}" Height="44" Text="8249103" Margin="0,0,0,16"/>
+
+                <!-- PIN Input -->
+                <TextBlock Text="Güvenlik PIN / Şifre" Foreground="{StaticResource BrushTextSecondary}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6"/>
+                <PasswordBox x:Name="TxtPin" Style="{StaticResource ModernPasswordBox}" Height="44" Password="1234" Margin="0,0,0,14" KeyDown="TxtPin_KeyDown"/>
+
+                <!-- Remember Me & Forgot PIN -->
+                <Grid Margin="0,0,0,24">
+                    <CheckBox x:Name="ChkRememberMe" Content="Beni Hatırla" IsChecked="True" Foreground="{StaticResource BrushTextSecondary}" VerticalAlignment="Center" Cursor="Hand"/>
+                    <TextBlock Text="PIN'imi Unuttum" Foreground="{StaticResource BrushCyan}" HorizontalAlignment="Right" VerticalAlignment="Center" Cursor="Hand" TextDecorations="Underline" MouseDown="ForgotPin_MouseDown"/>
+                </Grid>
+
+                <!-- Login Button -->
+                <Button x:Name="BtnLogin" Content="Giriş Yap" Style="{StaticResource PrimaryButton}" Height="46" FontSize="15" Click="BtnLogin_Click"/>
+
+                <!-- Quick Demo Login Button -->
+                <Button Content="⚡ Demo Hesapla Hızlı Giriş" Style="{StaticResource SecondaryButton}" Height="42" Margin="0,12,0,0" Click="BtnDemo_Click"/>
+
+                <!-- Security Badge -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,26,0,0">
+                    <TextBlock Text="🔒 256-Bit SSL Uçtan Uca Güvenli Bağlantı" FontSize="11" Foreground="{StaticResource BrushTextMuted}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

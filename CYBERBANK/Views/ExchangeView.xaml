@@ -1,0 +1,122 @@
+<UserControl x:Class="CyberBank.Views.ExchangeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="850" d:DesignWidth="1100">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="28,20,28,32">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.3*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left: Market Rates Table -->
+            <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                <TextBlock Text="Piyasa Fiyatları &amp; Döviz Kurları" FontSize="22" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,0,0,4"/>
+                <TextBlock Text="Canlı piyasa verileri ve avantajlı banka alış-satış makasları" FontSize="13" Foreground="{StaticResource BrushTextMuted}" Margin="0,0,0,20"/>
+
+                <ItemsControl x:Name="RatesList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource CardPanel}" Margin="0,0,0,10" Padding="16">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Symbol Badge -->
+                                    <Border Width="44" Height="44" CornerRadius="12" Background="#162A45" Margin="0,0,14,0" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Symbol}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushCyan}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+
+                                    <!-- Currency Name & Code -->
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Name}" FontSize="14.5" FontWeight="SemiBold" Foreground="{StaticResource BrushTextPrimary}"/>
+                                        <TextBlock Text="{Binding Code}" FontSize="12" Foreground="{StaticResource BrushTextMuted}" Margin="0,2,0,0"/>
+                                    </StackPanel>
+
+                                    <!-- Buying Rate -->
+                                    <StackPanel Grid.Column="2" Margin="0,0,24,0" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                        <TextBlock Text="Alış" FontSize="11" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Right"/>
+                                        <TextBlock Text="{Binding BuyingRate, StringFormat='{}{0:N2} ₺'}" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource BrushTextPrimary}" HorizontalAlignment="Right"/>
+                                    </StackPanel>
+
+                                    <!-- Selling Rate -->
+                                    <StackPanel Grid.Column="3" Margin="0,0,20,0" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                        <TextBlock Text="Satış" FontSize="11" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Right"/>
+                                        <TextBlock Text="{Binding SellingRate, StringFormat='{}{0:N2} ₺'}" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource BrushTextPrimary}" HorizontalAlignment="Right"/>
+                                    </StackPanel>
+
+                                    <!-- Daily Change -->
+                                    <Border Grid.Column="4" Background="#132A32" CornerRadius="8" Padding="8,4" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding ChangeSign}" Foreground="{Binding ChangeColor}" FontSize="12" FontWeight="Bold"/>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <!-- Right: Buy / Sell Trading Box -->
+            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                <TextBlock Text="Anında Alış / Satış" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,0,0,4"/>
+                <TextBlock Text="Komisyonsuz anında döviz ve kıymetli maden işlemi" FontSize="13" Foreground="{StaticResource BrushTextMuted}" Margin="0,0,0,20"/>
+
+                <Border Style="{StaticResource CardPanel}" Padding="20">
+                    <StackPanel>
+                        <!-- Buy or Sell Switch -->
+                        <Grid Margin="0,0,0,18">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <RadioButton x:Name="RbBuy" Content="🟢 Döviz Al (TL ile)" IsChecked="True" Foreground="White" FontWeight="SemiBold" FontSize="13" VerticalAlignment="Center" Checked="TradeMode_Changed"/>
+                            <RadioButton x:Name="RbSell" Grid.Column="1" Content="🔴 Döviz Sat (TL Al)" Foreground="White" FontWeight="SemiBold" FontSize="13" VerticalAlignment="Center" Checked="TradeMode_Changed"/>
+                        </Grid>
+
+                        <!-- Currency Selector -->
+                        <TextBlock Text="İşlem Para Birimi" Foreground="{StaticResource BrushTextSecondary}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6"/>
+                        <ComboBox x:Name="CmbTradingCurrency" Height="42" Margin="0,0,0,16" DisplayMemberPath="Name" SelectionChanged="CmbTradingCurrency_SelectionChanged"/>
+
+                        <!-- Amount Input -->
+                        <TextBlock x:Name="LblAmountTitle" Text="Alınacak Miktar" Foreground="{StaticResource BrushTextSecondary}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtTradeAmount" Style="{StaticResource ModernTextBox}" Height="44" FontSize="16" FontWeight="SemiBold" Text="100" TextChanged="TxtTradeAmount_TextChanged" Margin="0,0,0,16"/>
+
+                        <!-- Calculated Info Box -->
+                        <Border Background="#16233B" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="10" Padding="14" Margin="0,0,0,20">
+                            <StackPanel>
+                                <Grid Margin="0,0,0,8">
+                                    <TextBlock Text="Uygulanan Kur" FontSize="12.5" Foreground="{StaticResource BrushTextSecondary}"/>
+                                    <TextBlock x:Name="TxtEffectiveRate" Text="1 USD = 34.35 ₺" FontSize="12.5" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Right"/>
+                                </Grid>
+                                <Grid Margin="0,0,0,8">
+                                    <TextBlock Text="Mevcut TL Bakiyeniz" FontSize="12.5" Foreground="{StaticResource BrushTextSecondary}"/>
+                                    <TextBlock x:Name="TxtAvailableTl" Text="₺ 84,450.75" FontSize="12.5" FontWeight="SemiBold" Foreground="{StaticResource BrushEmerald}" HorizontalAlignment="Right"/>
+                                </Grid>
+                                <Grid Margin="0,0,0,8">
+                                    <TextBlock Text="Seçili Döviz Bakiyeniz" FontSize="12.5" Foreground="{StaticResource BrushTextSecondary}"/>
+                                    <TextBlock x:Name="TxtAvailableForeign" Text="$ 3,450.00" FontSize="12.5" FontWeight="SemiBold" Foreground="{StaticResource BrushCyan}" HorizontalAlignment="Right"/>
+                                </Grid>
+                                <Border Height="1" Background="{StaticResource BrushBorder}" Margin="0,4,0,8"/>
+                                <Grid>
+                                    <TextBlock x:Name="LblTotalCostTitle" Text="Ödenecek Toplam Tutar" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource BrushTextPrimary}" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="TxtTotalCost" Text="₺ 3,435.00" FontSize="16" FontWeight="Bold" Foreground="{StaticResource BrushEmerald}" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Submit Button -->
+                        <Button x:Name="BtnExecuteTrade" Content="İşlemi Gerçekleştir" Style="{StaticResource PrimaryButton}" Height="46" FontSize="14" Click="BtnExecuteTrade_Click"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

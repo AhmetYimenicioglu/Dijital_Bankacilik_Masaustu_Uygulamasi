@@ -1,0 +1,167 @@
+<UserControl x:Class="CyberBank.Views.TransferView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="850" d:DesignWidth="1100">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="28,20,28,32">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.4*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Transfer Form -->
+            <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                <TextBlock Text="Para Transferi (FAST &amp; Havale)" FontSize="22" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,0,0,4"/>
+                <TextBlock Text="7/24 Anında Ücretsiz FAST ve Havale İşlemleri" FontSize="13" Foreground="{StaticResource BrushTextMuted}" Margin="0,0,0,20"/>
+
+                <!-- Sender Account -->
+                <TextBlock Text="Gönderen Hesap" Foreground="{StaticResource BrushTextSecondary}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6"/>
+                <ComboBox x:Name="CmbSourceAccount" Height="42" Margin="0,0,0,16" DisplayMemberPath="Name" SelectionChanged="CmbSourceAccount_SelectionChanged"/>
+
+                <!-- Saved Contacts Quick Select -->
+                <TextBlock Text="Kayıtlı Alıcılar" Foreground="{StaticResource BrushTextSecondary}" FontSize="13" FontWeight="Medium" Margin="0,0,0,8"/>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Margin="0,0,0,18">
+                    <ItemsControl x:Name="ContactsList">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource SecondaryButton}" Margin="0,0,10,0" Padding="12,8" Click="ContactButton_Click" Tag="{Binding}">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Border Width="32" Height="32" CornerRadius="16" Background="#0D9488" Margin="0,0,8,0">
+                                            <TextBlock Text="{Binding Initials}" FontSize="12" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Name}" FontSize="12.5" FontWeight="SemiBold" Foreground="{StaticResource BrushTextPrimary}"/>
+                                            <TextBlock Text="{Binding BankName}" FontSize="10.5" Foreground="{StaticResource BrushTextMuted}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <!-- Recipient IBAN -->
+                <TextBlock Text="Alıcı IBAN" Foreground="{StaticResource BrushTextSecondary}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6"/>
+                <TextBox x:Name="TxtIban" Style="{StaticResource ModernTextBox}" Height="42" Margin="0,0,0,14" Text="TR" MaxLength="34"/>
+
+                <!-- Recipient Name -->
+                <TextBlock Text="Alıcı Adı Soyadı / Unvanı" Foreground="{StaticResource BrushTextSecondary}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6"/>
+                <TextBox x:Name="TxtRecipientName" Style="{StaticResource ModernTextBox}" Height="42" Margin="0,0,0,14"/>
+
+                <!-- Amount Input -->
+                <TextBlock Text="Transfer Tutarı (₺)" Foreground="{StaticResource BrushTextSecondary}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6"/>
+                <TextBox x:Name="TxtAmount" Style="{StaticResource ModernTextBox}" Height="44" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8"/>
+
+                <!-- Quick Amount Buttons -->
+                <WrapPanel Margin="0,0,0,16">
+                    <Button Content="₺ 100" Style="{StaticResource SecondaryButton}" Margin="0,0,6,6" Padding="10,5" Click="QuickAmount_Click"/>
+                    <Button Content="₺ 250" Style="{StaticResource SecondaryButton}" Margin="0,0,6,6" Padding="10,5" Click="QuickAmount_Click"/>
+                    <Button Content="₺ 500" Style="{StaticResource SecondaryButton}" Margin="0,0,6,6" Padding="10,5" Click="QuickAmount_Click"/>
+                    <Button Content="₺ 1.000" Style="{StaticResource SecondaryButton}" Margin="0,0,6,6" Padding="10,5" Click="QuickAmount_Click"/>
+                    <Button Content="₺ 5.000" Style="{StaticResource SecondaryButton}" Margin="0,0,6,6" Padding="10,5" Click="QuickAmount_Click"/>
+                </WrapPanel>
+
+                <!-- Transfer Category & Description -->
+                <Grid Margin="0,0,0,24">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                        <TextBlock Text="İşlem Türü" Foreground="{StaticResource BrushTextSecondary}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6"/>
+                        <ComboBox x:Name="CmbCategory" Height="42">
+                            <ComboBoxItem Content="Diğer Transfer" IsSelected="True"/>
+                            <ComboBoxItem Content="Konut Kirası"/>
+                            <ComboBoxItem Content="Borç Ödeme"/>
+                            <ComboBoxItem Content="Site/Aidat"/>
+                            <ComboBoxItem Content="Eğitim/Okul"/>
+                            <ComboBoxItem Content="Ticari Ödeme"/>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                        <TextBlock Text="Açıklama (Opsiyonel)" Foreground="{StaticResource BrushTextSecondary}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtDescription" Style="{StaticResource ModernTextBox}" Height="42" Text="FAST Para Transferi"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Submit Button -->
+                <Button x:Name="BtnSendTransfer" Content="⚡ FAST ile 7/24 Anında Gönder" Style="{StaticResource PrimaryButton}" Height="48" FontSize="15" Click="BtnSendTransfer_Click"/>
+            </StackPanel>
+
+            <!-- Digital Receipt / Info Sidebar -->
+            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                <!-- FAST Info Card -->
+                <Border CornerRadius="14" Padding="18" Margin="0,0,0,20">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#042F2E" Offset="0"/>
+                            <GradientStop Color="#0F766E" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBlock Text="⚡" FontSize="20" Margin="0,0,8,0"/>
+                            <TextBlock Text="FAST ile 7/24 Kesintisiz" FontSize="15" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Text="Fonların Anlık ve Sürekli Transferi (FAST) sistemiyle, TCMB güvencesinde resmi tatil veya mesai saati fark etmeksizin saniyeler içinde para gönderebilirsiniz."
+                                   TextWrapping="Wrap" FontSize="12" Foreground="#CCFBF1" LineHeight="18"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Last Receipt Card (Appears after successful transfer) -->
+                <Border x:Name="ReceiptCard" Style="{StaticResource CardPanel}" Visibility="Collapsed">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                            <Border Width="36" Height="36" CornerRadius="18" Background="#10B981" Margin="0,0,10,0">
+                                <TextBlock Text="✓" FontSize="18" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="İşlem Başarılı!" FontSize="16" FontWeight="Bold" Foreground="{StaticResource BrushEmerald}"/>
+                                <TextBlock Text="Elektronik FAST Dekontu" FontSize="11.5" Foreground="{StaticResource BrushTextMuted}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <Border Height="1" Background="{StaticResource BrushBorder}" Margin="0,0,0,12"/>
+
+                        <Grid Margin="0,0,0,8">
+                            <TextBlock Text="Referans No" FontSize="12" Foreground="{StaticResource BrushTextSecondary}"/>
+                            <TextBlock x:Name="TxtReceiptNo" Text="TRX-94829103" FontSize="12" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <Grid Margin="0,0,0,8">
+                            <TextBlock Text="Alıcı" FontSize="12" Foreground="{StaticResource BrushTextSecondary}"/>
+                            <TextBlock x:Name="TxtReceiptRecipient" Text="Mehmet Demir" FontSize="12" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <Grid Margin="0,0,0,8">
+                            <TextBlock Text="Alıcı IBAN" FontSize="12" Foreground="{StaticResource BrushTextSecondary}"/>
+                            <TextBlock x:Name="TxtReceiptIban" Text="TR88 ... 5566" FontSize="12" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <Grid Margin="0,0,0,8">
+                            <TextBlock Text="Tutar" FontSize="12" Foreground="{StaticResource BrushTextSecondary}"/>
+                            <TextBlock x:Name="TxtReceiptAmount" Text="₺ 1,500.00" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrushEmerald}" HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <Grid Margin="0,0,0,16">
+                            <TextBlock Text="Tarih / Saat" FontSize="12" Foreground="{StaticResource BrushTextSecondary}"/>
+                            <TextBlock x:Name="TxtReceiptDate" Text="12.09.2026, 14:35" FontSize="12" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <Button Content="📋 Referans No Kopyala" Style="{StaticResource SecondaryButton}" Height="36" Click="BtnCopyReceipt_Click"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>
